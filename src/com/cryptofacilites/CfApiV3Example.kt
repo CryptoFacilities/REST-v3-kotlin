@@ -27,7 +27,7 @@ import java.math.BigDecimal
 const val BASE_URL = "https://www.cryptofacilities.com/derivatives"
 const val API_KEY = "..."    // accessible on your Account page under Settings -> API Keys
 const val API_SECRET = "..." // accessible on your Account page under Settings -> API Key
-const val TIMEOUT = 20.0
+const val TIMEOUT = 10.0
 
 const val ETH_SYMBOL = "fi_ethusd_180831"
 const val XBT_SYMBOL = "fi_xbtusd_180831"
