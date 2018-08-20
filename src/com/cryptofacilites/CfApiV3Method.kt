@@ -133,7 +133,7 @@ fun getNotifications() {
 fun getTransfers(params: Map<String, String> = mapOf()) {
     val endpoint = "/api/v3/transfers"
     val response = authRequest(GET, endpoint, params)
-    println("getNotifications():\n\t" + response.text)
+    println("getTransfers():\n\t" + response.text)
 }
 
 fun sendWithdrawal(params: Map<String, String>) {
