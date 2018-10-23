@@ -142,6 +142,12 @@ fun sendWithdrawal(params: Map<String, String>) {
     println("sendWithdrawal():\n\t" + response.text)
 }
 
+fun transfer(params: Map<String, String>) {
+    val endpoint = "/api/v3/transfer"
+    val response = authRequest(POST, endpoint, params = params)
+    println("transfer():\n\t" + response.text)
+}
+
 private fun authRequest(type: Util.RequestType, endpoint: String, params: Map<String, Any> = mapOf()): Response {
     val parameters = params.entries.joinToString(separator = "&")
     val nonce = Util.getNonce()

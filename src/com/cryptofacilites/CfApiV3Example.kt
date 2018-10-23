@@ -132,4 +132,10 @@ fun runExamples() {
 //                    "currency" to "eth",
 //                    "amount" to "0.1"))
 
+    transfer(
+            mapOf("fromAccount" to "fi_ethusd",
+                    "toAccount" to "cash",
+                    "unit" to "eth",
+                    "amount" to "0.1"))
+
 }
