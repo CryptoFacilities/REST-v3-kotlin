@@ -118,6 +118,12 @@ fun getOpenPositions() {
     println("getOpenPositions():\n\t" + response.text)
 }
 
+fun getRecentOrders(params: Map<String, String> = mapOf()) {
+    val endpoint = "/api/v3/recentorders"
+    val response = authRequest(GET, endpoint, params = params)
+    println("getRecentOrders():\n\t" + response.text)
+}
+
 fun getFills(params: Map<String, String> = mapOf()) {
     val endpoint = "/api/v3/fills"
     val response = authRequest(GET, endpoint, params)

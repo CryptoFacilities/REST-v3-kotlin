@@ -120,17 +120,19 @@ fun runExamples() {
 
     getOpenPositions()
 
+    getRecentOrders(mapOf("symbol" to "PI_XBTUSD"))
+
     getFills(mapOf("lastFillTime" to "2018-08-15T14:50:47.759Z"))
 
     getNotifications()
 
     getTransfers(mapOf("lastTransferTime" to "2018-08-15T14:50:47.759Z"))
 
-//    sendWithdrawal(
-//            mapOf(
-//                    "targetAddress" to "0x2DgTDWB50Db8c3EcA13Bf8c3Ec9408D6EEc24D81",
-//                    "currency" to "eth",
-//                    "amount" to "0.1"))
+    sendWithdrawal(
+            mapOf(
+                    "targetAddress" to "0x2DgTDWB50Db8c3EcA13Bf8c3Ec9408D6EEc24D81",
+                    "currency" to "eth",
+                    "amount" to "0.1"))
 
     transfer(
             mapOf("fromAccount" to "fi_ethusd",
