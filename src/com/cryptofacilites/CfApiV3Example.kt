@@ -28,9 +28,10 @@ const val BASE_URL = "https://www.cryptofacilities.com/derivatives"
 const val API_KEY = "..."    // accessible on your Account page under Settings -> API Keys
 const val API_SECRET = "..." // accessible on your Account page under Settings -> API Key
 const val TIMEOUT = 10.0
+const val USE_NONCE = false
 
-const val ETH_SYMBOL = "fi_ethusd_180831"
-const val XBT_SYMBOL = "fi_xbtusd_180831"
+const val ETH_SYMBOL = "pi_ethusd"
+const val XBT_SYMBOL = "pi_xbtusd"
 const val MARGIN_ACCOUNT = "fi_xbtusd"
 
 
@@ -53,23 +54,29 @@ fun runExamples() {
 
     getAccounts()
 
-    // limit order with client order id
+    //send a limit order with client order id
     sendOrder(
             mapOf("orderType" to "lmt",
-                    "symbol" to "FI_XBTUSD_180831",
-                    "side" to "sell",
-                    "size" to 100,
-                    "limitPrice" to 9620,
-                    "cliOrdId" to "    my_client_id"))
+                    "symbol" to XBT_SYMBOL,
+                    "side" to "buy",
+                    "size" to 1,
+                    "limitPrice" to 1,
+                    "cliOrdId" to "my_client_id_a"))
 
-    // stop order
+    //edit order with client order id
+    editOrder(
+            mapOf("size" to 1,
+                  "limitPrice" to 2,
+                  "cliOrdId" to "my_client_id_a"))
+
+    //send a stop order
     sendOrder(
             mapOf("orderType" to "stp",
                     "symbol" to XBT_SYMBOL,
                     "side" to "buy",
                     "size" to 1,
                     "limitPrice" to 1.00,
-                    "stopPrice" to 1.25,
+                    "stopPrice" to 2.00,
                     "cliOrdId" to "dd2bd9f9-fb23-46cf-a49b-334a05aa6400"))
 
     // batchOrder
@@ -82,7 +89,7 @@ fun runExamples() {
                     "side" to "buy",
                     "size" to BigDecimal(100),
                     "limitPrice" to BigDecimal(1.0),
-                    "cliOrdId" to "my_client_id"),
+                    "cliOrdId" to "my_client_id_b"),
             mapOf(
                     "order" to "send",
                     "order_tag" to "2",
@@ -91,7 +98,7 @@ fun runExamples() {
                     "side" to "buy",
                     "size" to BigDecimal(100),
                     "limitPrice" to BigDecimal(1.0),
-                    "cliOrdId" to "my_client_id"),
+                    "cliOrdId" to "my_client_id_c"),
             mapOf(
                     "order" to "cancel",
                     "cliOrdId" to "dd2bd9f9-fb23-46cf-a49b-334a05aa6400"),
@@ -110,17 +117,17 @@ fun runExamples() {
             mapOf("symbol" to MARGIN_ACCOUNT)
     )
 
-    // cancel all orders
-    cancelAllOrders()
-
     // enable dead man's switch
     cancelAllOrdersAfter(timeout = 60)
 
     getOpenOrders()
 
+    // cancel all orders
+    cancelAllOrders()
+
     getOpenPositions()
 
-    getRecentOrders(mapOf("symbol" to "PI_XBTUSD"))
+    getRecentOrders(mapOf("symbol" to XBT_SYMBOL))
 
     getFills(mapOf("lastFillTime" to "2018-08-15T14:50:47.759Z"))
 
@@ -141,3 +148,8 @@ fun runExamples() {
                     "amount" to "0.1"))
 
 }
+
+
+
+
+

@@ -80,6 +80,13 @@ fun sendOrder(params: Map<String, Any>) {
 
 }
 
+fun editOrder(params: Map<String, Any>) {
+    val endpoint = "/api/v3/editorder"
+    val response = authRequest(POST, endpoint, params = params)
+    println("editorder():\n\t" + response.text)
+
+}
+
 fun batchOrder(orders: List<Map<String,Any>>) {
     val endpoint = "/api/v3/batchorder"
     val batchOrderJson = JSONObject(mapOf("batchOrder" to orders))
@@ -156,12 +163,21 @@ fun transfer(params: Map<String, String>) {
 
 private fun authRequest(type: Util.RequestType, endpoint: String, params: Map<String, Any> = mapOf()): Response {
     val parameters = params.entries.joinToString(separator = "&")
-    val nonce = Util.getNonce()
-    val authent = signRequest(endpoint, nonce, parameters)
-    val headers = mapOf(
-            "APIKey" to API_KEY,
-            "nonce" to nonce,
-            "authent" to authent)
+    val authent : String
+    val headers : Map<String,String>
+    if (USE_NONCE) {
+        val nonce = Util.getNonce()
+        authent = signRequest(endpoint, parameters, nonce=nonce)
+        headers = mapOf(
+                "APIKey" to API_KEY,
+                "nonce" to nonce,
+                "authent" to authent)
+    } else {
+        authent = signRequest(endpoint, parameters)
+        headers = mapOf(
+                "APIKey" to API_KEY,
+                "authent" to authent)
+    }
 
     return when (type) {
         GET -> get(BASE_URL + endpoint, params = params.mapValues { it.value.toString() }, headers = headers, timeout = TIMEOUT)
@@ -170,9 +186,9 @@ private fun authRequest(type: Util.RequestType, endpoint: String, params: Map<St
     }
 }
 
-fun signRequest(endpoint: String, nonce: String, postData: String): String {
+fun signRequest(endpoint: String, postData: String, nonce: String? = null): String {
     // Step 1: concatenate postData, nonce + endpoint
-    val message = postData + nonce + endpoint
+    val message = if (USE_NONCE) postData + nonce + endpoint else postData + endpoint
 
     // Step 2: hash the result of step 1 with SHA256
     val hash = MessageDigest.getInstance("SHA-256").digest(message.toByteArray(StandardCharsets.UTF_8))
