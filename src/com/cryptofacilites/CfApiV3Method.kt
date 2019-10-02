@@ -29,12 +29,13 @@ import org.json.JSONObject
 import util.Util
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
-import java.util.Base64
 
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import util.Util.RequestType.GET
 import util.Util.RequestType.POST
+import java.util.LinkedHashMap
+import java.util.Base64
 
 /* Public endpoints */
 fun getInstruments() {
@@ -162,26 +163,28 @@ fun transfer(params: Map<String, String>) {
 }
 
 private fun authRequest(type: Util.RequestType, endpoint: String, params: Map<String, Any> = mapOf()): Response {
-    val parameters = params.entries.joinToString(separator = "&")
+    // keep the order of the parameters to sign what you actually send
+    val parameters = LinkedHashMap(params.mapValues { it.value.toString() })
+    val parametersString = parameters.entries.joinToString(separator = "&")
     val authent : String
     val headers : Map<String,String>
     if (USE_NONCE) {
         val nonce = Util.getNonce()
-        authent = signRequest(endpoint, parameters, nonce=nonce)
+        authent = signRequest(endpoint, parametersString, nonce=nonce)
         headers = mapOf(
                 "APIKey" to API_KEY,
                 "nonce" to nonce,
                 "authent" to authent)
     } else {
-        authent = signRequest(endpoint, parameters)
+        authent = signRequest(endpoint, parametersString)
         headers = mapOf(
                 "APIKey" to API_KEY,
                 "authent" to authent)
     }
 
     return when (type) {
-        GET -> get(BASE_URL + endpoint, params = params.mapValues { it.value.toString() }, headers = headers, timeout = TIMEOUT)
-        POST -> post(BASE_URL + endpoint, params = params.mapValues { it.value.toString() }, headers = headers, timeout = TIMEOUT)
+        GET -> get(BASE_URL + endpoint, params = parameters, headers = headers, timeout = TIMEOUT)
+        POST -> post(BASE_URL + endpoint, data = parameters, headers = headers, timeout = TIMEOUT)
         else -> throw UnsupportedOperationException()
     }
 }
