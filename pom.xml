@@ -17,6 +17,10 @@
             <id>jcenter</id>
             <url>http://jcenter.bintray.com/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <build>
@@ -51,10 +55,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>khttp</groupId>
+            <groupId>com.github.jkcclemens</groupId>
             <artifactId>khttp</artifactId>
-            <version>1.0.0</version>
-            <scope>runtime</scope>
+            <version>0.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
